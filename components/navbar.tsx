@@ -1,6 +1,5 @@
-// import AppLogo from "../public/logo/app-logo.png";
-import SearchIcon from "../public/icons/search-icon.png";
-import Image from "next/image";
+// import SearchIcon from "../public/icons/search-icon.png";
+// import Image from "next/image";
 
 const Navbar = () => {
   return (
@@ -9,6 +8,7 @@ const Navbar = () => {
         className="mx-auto flex max-w-7xl items-center justify-between p-4 space-x-8 lg:px-8"
         aria-label="Global"
       >
+        {/* logo */}
         <div className="flex">
           <a href="#" className="-m-1.5 p-1.5">
             <span className="sr-only">Your Company</span>
@@ -18,7 +18,9 @@ const Navbar = () => {
             </div>
           </a>
         </div>
-        <div className="flex lg:flex-1 bg-slate-100 p-2 rounded-md justify-between">
+
+        {/* search bar */}
+        {/* <div className="flex lg:flex-1 bg-slate-100 p-2 rounded-md justify-between">
           <input
             className="grow bg-slate-100 border-0 outline-0"
             placeholder="Search here"
@@ -37,7 +39,9 @@ const Navbar = () => {
               d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
             />
           </svg>
-        </div>
+        </div> */}
+
+        {/* account avatar */}
         <div className="peer lg:justify-end">
           <div className=" flex -space-x-2 overflow-hidden bg-slate-200 rounded-full p-2">
             <p className="text-indigo-500 text-sm">WA</p>
