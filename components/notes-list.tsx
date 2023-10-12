@@ -27,7 +27,8 @@ const NotesArray = [
   },
 ];
 
-const NotesList = () => {
+const NotesList = (props: { data: Array<any> }) => {
+  const { data } = props;
   return (
     <div className="flex px-5 py-5 flex-wrap gap-2">
       {NotesArray.map((note) => (
