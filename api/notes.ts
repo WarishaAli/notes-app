@@ -6,6 +6,8 @@ import {
   doc,
   deleteDoc,
   query,
+  getDocs,
+  DocumentData,
 } from "firebase/firestore";
 
 /* the data is stored in the firestore as follows:
@@ -33,26 +35,36 @@ import {
 
 const getNotes = async (userId: string) => {
   try {
-    const notesData = doc(db, "notes", userId, "notesList");
-    console.log({notesData})
-    return notesData
+    let data:Array<DocumentData>=[]
+    let notesData = await getDocs(collection(db, "notes", `${userId}/notesList`));
+    // console.log({notesData})
+    notesData.forEach((doc) =>{ 
+      // console.log(doc.id)
+      data.push( JSON.parse( JSON.stringify( {...doc.data(), id : doc.id})));
+    
+    })
+    console.log({data})
+    return data
   } catch(e){
     console.log("error in getNotes >", e)
     return null
   }
 }
 
-const addNotes = async ({ userId, title, notes, }) => {
+const addNotes = async ({ userId, title, notes, label }: {userId: string, title: string, notes: string, label: string}) => {
   try {
-    await addDoc(collection(db, "notes", userId, "notesList"), {
-      user: userId,
+    const addDocResult = await addDoc(collection(db, "notes", userId, "notesList"), {
+      // user: userId,
       title: title,
       notes: notes,
-      label: "",
-      createdAt: new Date().getTime(),
+      label: label,
+      createdAt: new Date().toISOString(),
     });
+    console.log({addDocResult})
+    return addDocResult
   } catch (err) {
     console.log("error in add notes >>>", err)
+    return err
   }
 };
 

@@ -1,9 +1,10 @@
 // import useAuth from "@/hooks/useAuth";
 import { auth } from "../firebase/index";
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import LoadingSpinner from "./loading-spinner";
 
-const Auth = () => {
-//   const { isLoggedIn, user } = useAuth();
+const Auth = (props: { loading: boolean }) => {
+  //   const { isLoggedIn, user } = useAuth();
 
   const handleAuth = async () => {
     const provider = new GoogleAuthProvider();
@@ -29,6 +30,7 @@ const Auth = () => {
   };
   return (
     <div className="flex flex-col h-screen justify-center items-center bg-[url('https://img.freepik.com/free-vector/winter-blue-pink-gradient-background-vector_53876-117276.jpg?w=900&t=st=1696265065~exp=1696265665~hmac=30c5f6253759a9ddb015b4110e757723b8806544d1ce88a97da31726659ac2b6')] bg-no-repeat bg-cover">
+      {props.loading && <LoadingSpinner />}
       <h1 className="text-3xl font-black text-indigo-800">Notes App</h1>
       <h1 className="text-xl font-mono text-indigo-900">
         Simple & Quick Note Taking
@@ -37,6 +39,7 @@ const Auth = () => {
       <button
         className="bg-slate-100 px-4 py-2 rounded-lg mt-3 font-semibold text-sm text-indigo-800 shadow-lg hover:bg-indigo-100 hover:text-indigo-900"
         onClick={handleAuth}
+        disabled={props.loading}
       >
         Sign in with Google
       </button>

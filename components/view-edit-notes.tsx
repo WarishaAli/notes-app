@@ -1,3 +1,4 @@
+import { editNotes } from "@/api/notes";
 import Modal from "./modal";
 import { NoteProps } from "./notes-item";
 
@@ -8,6 +9,10 @@ export interface IPreviewNotes {
 type PreviewNotesProps = NoteProps & IPreviewNotes;
 
 const ViewAndEditNotes = (props: PreviewNotesProps) => {
+
+  const onEditNotes = () => {
+    const result = editNotes();
+  }
   return (
     <div className="flex flex-col justify-stretch	items-stretch w-full">
       {/* title */}
@@ -19,7 +24,7 @@ const ViewAndEditNotes = (props: PreviewNotesProps) => {
 
       {/* note */}
       <textarea
-        defaultValue={props.note}
+        defaultValue={props.notes}
         aria-multiline
         placeholder="Take a note"
         className="py-3 outline-0 text-sm max-w-screen h-full"

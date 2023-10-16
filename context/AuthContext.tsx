@@ -7,7 +7,7 @@ const AuthContext = createContext<{ user: any | null }>({
 });
 
 export function AuthProvider({ children }: any) {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<any>(undefined);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
