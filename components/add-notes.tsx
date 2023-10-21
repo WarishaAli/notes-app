@@ -1,16 +1,17 @@
 import { addNotes } from "@/api/notes";
 import { useAuth } from "@/context/AuthContext";
-import { useCallback, useEffect, useRef, useState } from "react";
+import RefreshNotesContext from "@/context/RefreshNotesContext";
+import { useCallback, useEffect, useRef, useState, useContext } from "react";
 import LoadingSpinner from "./loading-spinner";
 
-const AddNote = (props: { onRefreshData: () => void }) => {
+const AddNote = () => {
   const [isEditing, setEditing] = useState(false);
   const [title, setTitle] = useState("");
   const [note, setNote] = useState("");
   const [loading, setLoading] = useState(false);
   const ref = useRef<null | HTMLDivElement>(null);
   const { user } = useAuth();
-  const { onRefreshData } = props;
+  const onRefreshData = useContext(RefreshNotesContext);
 
   const closeNotesEditor = useCallback(() => {
     setEditing(false);
@@ -19,8 +20,7 @@ const AddNote = (props: { onRefreshData: () => void }) => {
   }, []);
 
   const onAddNotes = useCallback(async () => {
-    console.log("in add notes");
-    closeNotesEditor();
+    if (!title && !note) return;
     setLoading(true);
     const result = await addNotes({
       userId: user.uid,
@@ -28,20 +28,17 @@ const AddNote = (props: { onRefreshData: () => void }) => {
       notes: note,
       label: "",
     });
-    console.log("result of adding notes >>>", result);
     onRefreshData();
     setLoading(false);
+    closeNotesEditor();
   }, [note, title, closeNotesEditor, user.uid, onRefreshData]);
 
   useEffect(() => {
     const handleClickOutside = (event: any) => {
       if (ref.current && !ref.current.contains(event.target)) {
-        console.log("in handleClickOutside");
-
         if (title === "" && note === "") {
           closeNotesEditor();
         } else {
-          console.log("in handleClickOutside , else");
           onAddNotes();
         }
       }
@@ -110,6 +107,12 @@ const AddNote = (props: { onRefreshData: () => void }) => {
             </div> */}
             <button
               className="px-3 py-1 rounded-md hover:bg-indigo-100 text-indigo-800 text-md"
+              onClick={onAddNotes}
+            >
+              Add Note
+            </button>
+            <button
+              className="px-3 py-1 rounded-md hover:text-indigo-500 text-slate-800 text-md"
               onClick={closeNotesEditor}
             >
               Close

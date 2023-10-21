@@ -9,6 +9,7 @@ import nookies from "nookies";
 import { firebaseAdmin } from "@/firebase/admin";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/router";
+import RefreshNotesContext from "@/context/RefreshNotesContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -29,9 +30,11 @@ export default function Home(props: HomePageProps) {
     <main className={`flex min-h-screen flex-col ${inter.className}`}>
       {user ? (
         <>
-          <Navbar />
-          <AddNote onRefreshData={refreshNotesList} />
-          <NotesList data={props.data} />{" "}
+          <RefreshNotesContext.Provider value={refreshNotesList}>
+            <Navbar />
+            <AddNote />
+            <NotesList data={props.data} />
+          </RefreshNotesContext.Provider>
         </>
       ) : (
         <Auth loading={user === undefined} />
@@ -49,6 +52,6 @@ export const getServerSideProps = async (ctx) => {
     return { props: { data, error: null } };
   } catch (e) {
     console.log("error", e);
-    return { props: { data: null, error: e } };
+    return { props: { data: null, error: e?.code } };
   }
 };

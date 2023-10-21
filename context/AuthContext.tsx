@@ -15,19 +15,22 @@ export function AuthProvider({ children }: any) {
     }
     return auth.onIdTokenChanged(async (user) => {
       console.log(`token changed!`);
-      if (!user) {
+      try {
+        if (!user) {
+          throw new Error("user is null");
+        }
+        console.log(`updating token...`);
+        const token = await user.getIdToken();
+        setUser(user);
+        nookies.destroy(null, "token");
+        nookies.set(null, "token", token, { path: "/" });
+      } catch (e) {
         console.log(`no token found...`);
         setUser(null);
         nookies.destroy(null, "token");
         nookies.set(null, "token", "", { path: "/" });
         return;
       }
-
-      console.log(`updating token...`);
-      const token = await user.getIdToken();
-      setUser(user);
-      nookies.destroy(null, "token");
-      nookies.set(null, "token", token, { path: "/" });
     });
   }, []);
 

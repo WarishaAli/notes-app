@@ -9,6 +9,7 @@ import {
   getDocs,
   DocumentData,
 } from "firebase/firestore";
+import { NoteProps } from "@/components/notes-item";
 
 /* the data is stored in the firestore as follows:
   data
@@ -60,7 +61,7 @@ const addNotes = async ({ userId, title, notes, label }: {userId: string, title:
       label: label,
       createdAt: new Date().toISOString(),
     });
-    console.log({addDocResult})
+    // console.log({addDocResult})
     return addDocResult
   } catch (err) {
     console.log("error in add notes >>>", err)
@@ -68,22 +69,22 @@ const addNotes = async ({ userId, title, notes, label }: {userId: string, title:
   }
 };
 
-const editNotes = async (note, userId) => {
+const editNotes = async (note: NoteProps, userId: string) => {
   const {id, notes, title, label} = note
     try {
       const noteToEditRef = doc(db, "notes", userId, "notesList", id)
-        await updateDoc(noteToEditRef, {
+        const result = await updateDoc(noteToEditRef, {
           title, notes, label
-
         })
+        console.log("edit result >>>>>>", result)
     } catch(e) {
       console.log("error in editNotes", e)
     }
 }
 
-const deleteNotes = async (docId, userId) => {
+const deleteNotes = async (noteId, userId) => {
   try {
-    const noteRef = doc(db, "notes", userId, "notesList", docId);
+    const noteRef = doc(db, "notes", userId, "notesList", noteId);
     await deleteDoc(noteRef);
   } catch (err) {
     console.log(err);
