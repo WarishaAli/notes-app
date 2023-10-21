@@ -1,12 +1,17 @@
-import Image from "next/image";
-import { useCallback, useEffect, useRef, useState } from "react";
-import EditIcon from "../public/icons/edit-icon.png";
+import { addNotes } from "@/api/notes";
+import { useAuth } from "@/context/AuthContext";
+import RefreshNotesContext from "@/context/RefreshNotesContext";
+import { useCallback, useEffect, useRef, useState, useContext } from "react";
+import LoadingSpinner from "./loading-spinner";
 
 const AddNote = () => {
   const [isEditing, setEditing] = useState(false);
   const [title, setTitle] = useState("");
   const [note, setNote] = useState("");
+  const [loading, setLoading] = useState(false);
   const ref = useRef<null | HTMLDivElement>(null);
+  const { user } = useAuth();
+  const onRefreshData = useContext(RefreshNotesContext);
 
   const closeNotesEditor = useCallback(() => {
     setEditing(false);
@@ -14,20 +19,43 @@ const AddNote = () => {
     setTitle("");
   }, []);
 
+  const onAddNotes = useCallback(async () => {
+    if (!title && !note) return;
+    setLoading(true);
+    const result = await addNotes({
+      userId: user.uid,
+      title: title,
+      notes: note,
+      label: "",
+    });
+    onRefreshData();
+    setLoading(false);
+    closeNotesEditor();
+  }, [note, title, closeNotesEditor, user.uid, onRefreshData]);
+
   useEffect(() => {
     const handleClickOutside = (event: any) => {
       if (ref.current && !ref.current.contains(event.target)) {
-        closeNotesEditor && closeNotesEditor();
+        if (title === "" && note === "") {
+          closeNotesEditor();
+        } else {
+          onAddNotes();
+        }
       }
     };
     document.addEventListener("click", handleClickOutside, true);
     return () => {
       document.removeEventListener("click", handleClickOutside, true);
     };
-  }, [closeNotesEditor]);
+  }, [closeNotesEditor, note, title, onAddNotes]);
+
+  const onChangeTitle = (e) => setTitle(e.target.value);
+
+  const onChangeNotes = (e) => setNote(e.target.value);
 
   return (
     <div className="flex items-center justify-center mt-5 px-5">
+      {loading && <LoadingSpinner />}
       {isEditing ? (
         // expanded typing area, opens up when user clicks on add note text field
         <div
@@ -38,6 +66,8 @@ const AddNote = () => {
           <input
             placeholder="Title"
             className="flex grow py-3 outline-0 text-md font-semibold"
+            value={title}
+            onChange={onChangeTitle}
           />
 
           {/* note */}
@@ -45,6 +75,8 @@ const AddNote = () => {
             aria-multiline
             placeholder="Take a note"
             className="grow py-3 outline-0 text-sm max-h-screen"
+            value={note}
+            onChange={onChangeNotes}
           />
 
           {/* toolbar: add label and close buttons */}
@@ -75,6 +107,12 @@ const AddNote = () => {
             </div> */}
             <button
               className="px-3 py-1 rounded-md hover:bg-indigo-100 text-indigo-800 text-md"
+              onClick={onAddNotes}
+            >
+              Add Note
+            </button>
+            <button
+              className="px-3 py-1 rounded-md hover:text-indigo-500 text-slate-800 text-md"
               onClick={closeNotesEditor}
             >
               Close
@@ -87,6 +125,7 @@ const AddNote = () => {
             placeholder="Take a note"
             className="flex grow py-3 outline-0 rounded-full"
             onFocus={() => setEditing(true)}
+            value={title}
           />
           <svg
             xmlns="http://www.w3.org/2000/svg"
