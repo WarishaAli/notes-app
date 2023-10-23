@@ -42,7 +42,7 @@ export default function Home(props: HomePageProps) {
     </main>
   );
 }
-export const getServerSideProps = async (ctx) => {
+export const getServerSideProps = async (ctx: any) => {
   try {
     const cookies = nookies.get(ctx);
     const token = await firebaseAdmin.auth().verifyIdToken(cookies.token);
@@ -50,7 +50,7 @@ export const getServerSideProps = async (ctx) => {
     const data = await getNotes(uid);
     if (!data) return { props: { data: [], error: null } };
     return { props: { data, error: null } };
-  } catch (e) {
+  } catch (e: any) {
     console.log("error", e);
     return { props: { data: null, error: e?.code } };
   }

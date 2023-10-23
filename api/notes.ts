@@ -82,7 +82,7 @@ const editNotes = async (note: NoteProps, userId: string) => {
     }
 }
 
-const deleteNotes = async (noteId, userId) => {
+const deleteNotes = async (noteId: string, userId: string) => {
   try {
     const noteRef = doc(db, "notes", userId, "notesList", noteId);
     await deleteDoc(noteRef);
