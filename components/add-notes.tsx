@@ -49,9 +49,11 @@ const AddNote = () => {
     };
   }, [closeNotesEditor, note, title, onAddNotes]);
 
-  const onChangeTitle = (e) => setTitle(e.target.value);
+  const onChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setTitle(e.target.value);
 
-  const onChangeNotes = (e) => setNote(e.target.value);
+  const onChangeNotes = (e: React.ChangeEvent<HTMLTextAreaElement>) =>
+    setNote(e.target.value);
 
   return (
     <div className="flex items-center justify-center mt-5 px-5">
