@@ -4,7 +4,7 @@ import Navbar from "@/components/navbar";
 import AddNote from "@/components/add-notes";
 import NotesList from "@/components/notes-list";
 import Auth from "@/components/auth";
-import { getNotes } from "@/api/notes";
+import { getNotes } from "@/pages/api/notes";
 import nookies from "nookies";
 import { firebaseAdmin } from "@/firebase/admin";
 import { useAuth } from "@/context/AuthContext";

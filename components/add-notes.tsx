@@ -1,4 +1,4 @@
-import { addNotes } from "@/api/notes";
+import { addNotes } from "@/pages/api/notes";
 import { useAuth } from "@/context/AuthContext";
 import RefreshNotesContext from "@/context/RefreshNotesContext";
 import { useCallback, useEffect, useRef, useState, useContext } from "react";
