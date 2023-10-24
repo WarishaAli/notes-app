@@ -1,5 +1,4 @@
 import { Inter } from "next/font/google";
-import Head from "@/node_modules/next/head";
 import Navbar from "@/components/navbar";
 import AddNote from "@/components/add-notes";
 import NotesList from "@/components/notes-list";
