@@ -1,4 +1,3 @@
-import LoadingSpinner from "./loading-spinner";
 import NoData from "./no-data";
 import NotesItem from "./notes-item";
 

@@ -1,4 +1,4 @@
-import { editNotes } from "@/api/notes";
+import { editNotes } from "@/pages/api/notes";
 import { useAuth } from "@/context/AuthContext";
 import { NoteProps } from "./notes-item";
 import { useState, useContext } from "react";
